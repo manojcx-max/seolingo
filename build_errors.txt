@@ -1,0 +1,96 @@
+﻿Γû▓ Next.js 16.1.6 (Turbopack)
+
+  Creating an optimized production build ...
+node.exe : 
+At C:\Program 
+Files\nodejs\npx.ps1:29 
+char:3
++   & $NODE_EXE $NPX_CLI_JS 
+$args
++   ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo          
+    : NotSpecified: (:Stri  
+  ng) [], RemoteException
+    + FullyQualifiedErrorId 
+    : NativeCommandError
+ 
+thread 
+'tokio-runtime-worker' 
+(31988) panicked at C:\Users
+\Administrator\.cargo\regist
+ry\src\index.crates.io-1949c
+f8c6b5b557f\styled_jsx-0.111
+.0\src\transform_css_lightni
+ngcss.rs:688:10:
+failed to parse selector 
+list: ParseError { kind: Cus
+tom(SelectorError(DanglingCo
+mbinator)), location: 
+SourceLocation { line: 0, 
+column: 3 } }
+note: run with 
+`RUST_BACKTRACE=1` 
+environment variable to 
+display a backtrace
+
+> Build error occurred
+Error: Turbopack build 
+failed with 1 errors:
+./src/app/learn/page.tsx
+Module not found: Can't 
+resolve './page.tsx'
+failed to analyze 
+ecmascript module '[project]
+/src/app/learn/page.tsx 
+[app-client] (ecmascript)'
+
+Caused by:
+- failed to parse selector 
+list: ParseError { kind: Cus
+tom(SelectorError(DanglingCo
+mbinator)), location: 
+SourceLocation { line: 0, 
+column: 3 } }
+
+Debug info:
+- Execution of 
+<ModuleAssetContext as Asset
+Context>::process_resolve_re
+sult failed
+- Execution of <NextEcmascri
+ptClientReferenceTransition 
+as Transition>::process 
+failed
+- Execution of 
+Transition::process failed
+- Execution of *EcmascriptEx
+ports::split_locals_and_reex
+ports failed
+- Execution of 
+<EcmascriptModuleAsset as Ec
+mascriptChunkPlaceable>::get
+_exports failed
+- Execution of 
+analyze_ecmascript_module 
+failed
+- failed to analyze 
+ecmascript module '[project]
+/src/app/learn/page.tsx 
+[app-client] (ecmascript)'
+- Execution of parse failed
+- failed to parse selector 
+list: ParseError { kind: Cus
+tom(SelectorError(DanglingCo
+mbinator)), location: 
+SourceLocation { line: 0, 
+column: 3 } }
+
+
+https://nextjs.org/docs/mess
+ages/module-not-found
+
+
+    at <unknown> (https://ne
+xtjs.org/docs/messages/modul
+e-not-found)

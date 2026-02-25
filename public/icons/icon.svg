@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Original Duo Green Background Circle -->
+  <circle cx="256" cy="256" r="248" fill="#58cc02"/>
+
+  <!-- Owl Head/Body (Duo's rounded stadium look) -->
+  <path d="M256 90 C150 90 90 160 90 260 C90 360 150 430 256 430 C362 430 422 360 422 260 C422 160 362 90 256 90" fill="#58cc02" />
+
+  <!-- face mask (lighter green) -->
+  <path d="M256 410 C185 410 120 360 120 250 C120 175 170 115 256 115 C342 115 392 175 392 250 C392 360 327 410 256 410" fill="#89e219" />
+
+  <!-- EAR TUFTS -->
+  <path d="M140 160 C105 125 125 85 165 110 C185 122 215 130 256 130 C297 130 327 122 347 110 C387 85 407 125 372 160 Z" fill="#58cc02" />
+
+  <!-- ── EYES ── -->
+  <circle cx="195" cy="255" r="70" fill="white"/>
+  <circle cx="317" cy="255" r="70" fill="white"/>
+
+  <!-- LEFT PUPIL: Growth chart (Marketing) -->
+  <g transform="translate(165, 230) scale(0.65)">
+    <rect x="0" y="30" width="16" height="30" rx="4" fill="#1cb0f6"/>
+    <rect x="25" y="10" width="16" height="50" rx="4" fill="#1cb0f6"/>
+    <rect x="50" y="-10" width="16" height="70" rx="4" fill="#1cb0f6"/>
+    <path d="M-10 40 L60 -15" stroke="#1cb0f6" stroke-width="12" stroke-linecap="round" fill="none"/>
+    <path d="M60 -15 L45 -15 M60 -15 L60 0" stroke="#1cb0f6" stroke-width="12" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- RIGHT PUPIL: Magnifying glass (SEO) -->
+  <g transform="translate(288, 230) scale(0.75)">
+    <circle cx="30" cy="30" r="28" fill="none" stroke="#1cb0f6" stroke-width="14"/>
+    <line x1="52" y1="52" x2="75" y2="75" stroke="#1cb0f6" stroke-width="16" stroke-linecap="round"/>
+  </g>
+
+  <!-- BEAK (Official Duo pill shape) -->
+  <path d="M216 345 C216 375 234 400 256 400 C278 400 296 375 296 345 Z" fill="#ff9600" />
+  <path d="M216 345 C216 320 234 300 256 300 C278 300 296 320 296 345 Z" fill="#ffc800" />
+</svg>

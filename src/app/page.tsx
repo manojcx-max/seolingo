@@ -1,7 +1,9 @@
 "use client";
 import { useGameStore, getLevel } from "@/store/gameStore";
 import { curriculum, getAllLessons } from "@/data/curriculum";
+import { LionGuide } from "@/components/LionGuide";
 import Link from "next/link";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -58,7 +60,13 @@ export default function HomePage() {
         </div>
       </div>
 
+      <LionGuide
+        message={`Hey ${username}! Ready to sharpen your SEO claws?`}
+        subMessage="The first lesson on Rendering is waiting for you!"
+      />
+
       {showStreakModal && (
+
         <StreakModal streak={streak} gems={gems} onClose={() => setShowStreakModal(false)} />
       )}
 
@@ -104,10 +112,9 @@ export default function HomePage() {
               <div className="continue-badge">UP NEXT</div>
               <h3 className="continue-title">{nextLesson.title}</h3>
               <div className="continue-meta">
-                <span className="phase-indicator">{nextLesson.phaseTitle}</span>
-                <span className="dot">•</span>
                 <span className="xp-reward">+{nextLesson.xp} XP reward</span>
               </div>
+
             </div>
             <Link href={`/lesson/${nextLesson.id}`} className="continue-btn-v2">
               <span className="btn-text">CONTINUE</span>

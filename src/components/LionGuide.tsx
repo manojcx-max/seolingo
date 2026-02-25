@@ -32,17 +32,19 @@ export function LionGuide({ message, subMessage, position = "left" }: LionGuideP
                 }
 
                 .lion-character {
-                    width: 100px;
-                    height: 100px;
+                    width: 120px;
+                    height: 120px;
                     flex-shrink: 0;
-                    background: var(--bg-secondary);
-                    border-radius: 50%;
-                    padding: 10px;
-                    border: 3px solid var(--border);
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.08));
+                    transition: transform 0.3s ease;
                 }
+                .lion-character:hover {
+                    transform: scale(1.05) rotate(2deg);
+                }
+
                 .lion-img {
                     width: 100%;
                     height: 100%;

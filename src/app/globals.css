@@ -2444,6 +2444,7 @@ a {
   padding: 24px 16px;
   background: var(--bg);
   overflow-x: hidden;
+  position: relative;
 }
 
 .ob-card {
@@ -2456,19 +2457,29 @@ a {
   padding: 32px;
   box-shadow: var(--shadow-md);
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.ob-footer {
+  margin-top: auto;
+  padding-top: 24px;
+  display: flex;
+  gap: 12px;
 }
 
 @media (max-width: 480px) {
   .ob-shell {
     justify-content: flex-start;
-    padding: 12px;
-    padding-top: 20px;
+    padding: 0;
   }
 
   .ob-card {
-    padding: 20px 16px;
-    border-radius: 20px;
-    border-bottom-width: 4px;
+    height: 100dvh;
+    border-radius: 0;
+    border: none;
+    padding: 20px 16px env(safe-area-inset-bottom);
+    max-width: 100%;
   }
 
   .ob-card h2 {
@@ -2477,13 +2488,31 @@ a {
   }
 
   .ob-card p {
-    font-size: 0.8rem !important;
+    font-size: 0.85rem !important;
     margin-bottom: 16px !important;
   }
 
+  .ob-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    background: var(--bg-card);
+    border-top: 2px solid var(--border);
+    z-index: 100;
+  }
+
+  .ob-content-scroll {
+    overflow-y: auto;
+    flex: 1;
+    padding-bottom: 120px;
+    /* Space for sticky footer */
+    -webkit-overflow-scrolling: touch;
+  }
+
   .goal-card {
-    padding: 10px 14px !important;
-    gap: 10px !important;
+    padding: 12px 16px !important;
     border-bottom-width: 4px !important;
   }
 
@@ -2498,7 +2527,7 @@ a {
   }
 
   .goal-card-title {
-    font-size: 0.9rem !important;
+    font-size: 1rem !important;
   }
 
   .goal-card-sub {
@@ -2516,8 +2545,7 @@ a {
   }
 
   .btn-premium {
-    padding: 14px !important;
-    font-size: 0.9rem !important;
+    width: 100%;
   }
 
   .ob-card>div:first-child {

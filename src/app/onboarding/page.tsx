@@ -75,45 +75,47 @@ export default function OnboardingPage() {
 
                 {/* ── Step 1: Goal ── */}
                 {step === 1 && (
-                    <div className="anim-fadein">
-                        <h2 style={{ marginBottom: 6, fontSize: '1.5rem', fontWeight: 900 }}>What is your grand mission? 🚀</h2>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", marginBottom: 20, fontWeight: 500 }}>Pick your path to digital immortality.</p>
+                    <div className="ob-content-scroll anim-fadein">
+                        <h2 style={{ fontWeight: 900 }}>What is your grand mission? 🚀</h2>
+                        <p style={{ color: "var(--text-secondary)", fontWeight: 500 }}>Pick your path to digital immortality.</p>
                         <div className="goal-list-wrap" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                             {GOALS.map(g => (
                                 <div key={g.id} className={`goal-card card-gamified${goal === g.id ? " selected" : ""}`} onClick={() => setGoalLocal(g.id)} style={{ borderBottomWidth: goal === g.id ? 8 : 4 }}>
                                     <div className="goal-card-icon" style={{ color: goal === g.id ? 'var(--primary)' : 'var(--text-muted)' }}>{g.icon}</div>
                                     <div style={{ flex: 1 }}>
-                                        <div className="goal-card-title" style={{ fontSize: '1.05rem', fontWeight: 950 }}>{g.title}</div>
-                                        <div className="goal-card-sub" style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.8 }}>{g.sub}</div>
+                                        <div className="goal-card-title" style={{ fontWeight: 950 }}>{g.title}</div>
+                                        <div className="goal-card-sub" style={{ fontWeight: 600, opacity: 0.8 }}>{g.sub}</div>
                                     </div>
                                     {goal === g.id && <span style={{ color: 'var(--primary)', fontSize: '1.5rem', fontWeight: 950 }}>🐾</span>}
                                 </div>
                             ))}
                         </div>
-                        <button className="btn-premium" style={{ width: '100%', marginTop: 20 }} disabled={!goal} onClick={() => setStep(2)}>
-                            I'M READY FOR SUCCESS!
-                        </button>
+                        <div className="ob-footer">
+                            <button className="btn-premium" disabled={!goal} onClick={() => setStep(2)}>
+                                I'M READY FOR SUCCESS!
+                            </button>
+                        </div>
                     </div>
                 )}
 
                 {/* ── Step 2: Learning Style ── */}
                 {step === 2 && (
-                    <div className="anim-fadein">
-                        <h2 style={{ marginBottom: 6, fontSize: '1.5rem', fontWeight: 900 }}>Choose your training style 🧪</h2>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", marginBottom: 20, fontWeight: 500 }}>How do you want us to deliver the knowledge?</p>
+                    <div className="ob-content-scroll anim-fadein">
+                        <h2 style={{ fontWeight: 900 }}>Choose your training style 🧪</h2>
+                        <p style={{ color: "var(--text-secondary)", fontWeight: 500 }}>How do you want us to deliver the knowledge?</p>
                         <div className="goal-list-wrap" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                             {STYLES.map(s => (
                                 <div key={s.id} className={`goal-card card-gamified${style === s.id ? " selected" : ""}`} onClick={() => setStyleLocal(s.id)} style={{ borderBottomWidth: style === s.id ? 8 : 4 }}>
                                     <div style={{ color: style === s.id ? 'var(--primary)' : 'var(--text-muted)' }}>{s.icon}</div>
                                     <div style={{ flex: 1 }}>
-                                        <div className="goal-card-title" style={{ fontSize: '1.05rem', fontWeight: 950 }}>{s.title}</div>
-                                        <div className="goal-card-sub" style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.8 }}>{s.sub}</div>
+                                        <div className="goal-card-title" style={{ fontWeight: 950 }}>{s.title}</div>
+                                        <div className="goal-card-sub" style={{ fontWeight: 600, opacity: 0.8 }}>{s.sub}</div>
                                     </div>
                                     {style === s.id && <ChevronRight size={24} color="var(--primary)" />}
                                 </div>
                             ))}
                         </div>
-                        <div style={{ display: "flex", gap: 12, marginTop: 28 }}>
+                        <div className="ob-footer">
                             <button className="btn btn-ghost" onClick={() => setStep(1)} style={{ fontWeight: 800 }}>Back</button>
                             <button className="btn-premium" style={{ flex: 1 }} onClick={() => setStep(3)}>
                                 PERFECT STYLE!
@@ -124,9 +126,9 @@ export default function OnboardingPage() {
 
                 {/* ── Step 3: Funny Username + Age ── */}
                 {step === 3 && (
-                    <div className="anim-fadein">
-                        <h2 style={{ marginBottom: 6, fontSize: '1.5rem', fontWeight: 900 }}>Who shall we address as "Le Legend"? 👑</h2>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 24, fontWeight: 500 }}>Give us your coolest username and your wisdom level (age).</p>
+                    <div className="ob-content-scroll anim-fadein">
+                        <h2 style={{ fontWeight: 900 }}>Who shall we address as "Le Legend"? 👑</h2>
+                        <p style={{ color: "var(--text-secondary)", fontWeight: 500 }}>Give us your coolest username and your wisdom level (age).</p>
 
                         <div style={{ marginBottom: 16 }}>
                             <label style={{ display: "block", fontWeight: 800, fontSize: "0.8rem", marginBottom: 8, textTransform: 'uppercase', color: 'var(--text-muted)' }}>The Legend's Name</label>
@@ -153,7 +155,7 @@ export default function OnboardingPage() {
                             />
                         </div>
 
-                        <div style={{ display: "flex", gap: 12 }}>
+                        <div className="ob-footer">
                             <button className="btn btn-ghost" onClick={() => setStep(2)} style={{ fontWeight: 800 }}>Back</button>
                             <button className="btn-premium" style={{ flex: 1 }} disabled={!name.trim() || !age} onClick={() => setStep(4)}>
                                 NEXT LEVEL!
@@ -164,9 +166,9 @@ export default function OnboardingPage() {
 
                 {/* ── Step 4: Profile Picture Upload ── */}
                 {step === 4 && (
-                    <div className="anim-fadein" style={{ textAlign: "center" }}>
-                        <h2 style={{ marginBottom: 6, fontSize: '1.5rem', fontWeight: 900 }}>Let's see that beautiful face! 📸</h2>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 32, fontWeight: 500 }}>Upload a picture or keep the mighty lion.</p>
+                    <div className="ob-content-scroll anim-fadein" style={{ textAlign: "center" }}>
+                        <h2 style={{ fontWeight: 900 }}>Let's see that beautiful face! 📸</h2>
+                        <p style={{ color: "var(--text-secondary)", fontWeight: 500 }}>Upload a picture or keep the mighty lion.</p>
 
                         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16, marginBottom: 20 }}>
                             <div
@@ -186,7 +188,7 @@ export default function OnboardingPage() {
                             onChange={handleFileChange}
                         />
 
-                        <div style={{ display: "flex", gap: 12 }}>
+                        <div className="ob-footer">
                             <button className="btn btn-ghost" onClick={() => setStep(3)} style={{ fontWeight: 800 }}>Back</button>
                             <button className="btn-premium" style={{ flex: 1 }} onClick={() => setStep(5)}>
                                 LOOKS SHARP!
@@ -197,10 +199,10 @@ export default function OnboardingPage() {
 
                 {/* ── Step 5: Final Motivation ── */}
                 {step === 5 && (
-                    <div className="anim-fadein" style={{ textAlign: "center" }}>
+                    <div className="ob-content-scroll anim-fadein" style={{ textAlign: "center" }}>
                         <div style={{ fontSize: "4rem", marginBottom: 16, animation: 'pop 0.5s ease' }}>{profileImg ? <div style={{ width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', border: '4px solid var(--green)', margin: '0 auto' }}><img src={profileImg} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div> : avatar}</div>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>"{randomQuote}"</h2>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", margin: "8px 0 20px", fontWeight: 500 }}>
+                        <h2 style={{ fontWeight: 900 }}>"{randomQuote}"</h2>
+                        <p style={{ color: "var(--text-secondary)", fontWeight: 500 }}>
                             You're all set, {name}! Your human age of {age} is perfect for mastering marketing with your {style} style.
                         </p>
                         <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
@@ -215,7 +217,7 @@ export default function OnboardingPage() {
                                 </div>
                             ))}
                         </div>
-                        <div style={{ display: "flex", gap: 12 }}>
+                        <div className="ob-footer">
                             <button className="btn btn-ghost" onClick={() => setStep(4)} style={{ fontWeight: 800 }}>Back</button>
                             <button className="btn-premium" style={{ flex: 1 }} onClick={handleStart}>
                                 LET'S GOOOOO! 🚀

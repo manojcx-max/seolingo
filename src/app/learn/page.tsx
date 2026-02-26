@@ -99,12 +99,17 @@ function LessonSnake({
 
                 const nodeGlowStyle: React.CSSProperties = isNext ? {
                     boxShadow: `0 0 0 6px ${phaseColor}22, 0 8px 24px rgba(0,0,0,0.1)`,
-                    border: `3px solid ${phaseColor}`,
+                    border: `4px solid ${phaseColor}`,
+                    borderBottomWidth: '10px'
                 } : done ? {
                     background: doneGradient,
                     borderColor: phaseColor,
-                    boxShadow: `0 6px 20px ${phaseColor}44, inset 0 1px 0 rgba(255,255,255,0.3)`,
-                } : {};
+                    borderBottomWidth: '10px',
+                    boxShadow: `0 10px 0 ${phaseColor}88, inset 0 1px 0 rgba(255,255,255,0.3)`,
+                } : {
+                    borderBottomWidth: '10px',
+                    boxShadow: `0 10px 0 var(--border)`
+                };
 
                 return (
                     <div
@@ -171,10 +176,10 @@ export default function LearnPage() {
                     <p className="lp-h1-sub">{completedCount} of {totalLessons} lessons completed</p>
                 </div>
                 <div className="lp-prog-row">
-                    <div className="lp-prog-track">
-                        <div className="lp-prog-fill" style={{ width: `${pct}%` }} />
+                    <div className="progress-track" style={{ height: 16 }}>
+                        <div className="progress-fill progress-fill-green" style={{ width: `${pct}%` }} />
                     </div>
-                    <span className="lp-pct">{pct}%</span>
+                    <span className="lp-pct">{pct}% COMPLETE</span>
                 </div>
             </div>
 
@@ -190,15 +195,16 @@ export default function LearnPage() {
                         <div key={phase.id} className="lp-phase">
                             {/* Phase banner */}
                             <div
-                                className="lp-banner"
+                                className="lp-banner anim-pop"
                                 style={{
                                     background: phaseUnlocked
-                                        ? `linear-gradient(135deg, ${phase.color}, ${phase.color}bb)`
+                                        ? `linear-gradient(135deg, ${phase.color}, ${hexOpacity(phase.color, 0.8)})`
                                         : "var(--bg-secondary)",
                                     color: phaseUnlocked ? "white" : "var(--text-muted)",
                                     boxShadow: phaseUnlocked
-                                        ? `0 10px 30px ${phase.color}33`
+                                        ? `0 12px 0 ${hexOpacity(phase.color, 0.6)}, 0 20px 40px ${hexOpacity(phase.color, 0.2)}`
                                         : "none",
+                                    border: phaseUnlocked ? 'none' : '2px solid var(--border)'
                                 }}
                             >
                                 <div className="lp-banner-icon">
@@ -209,7 +215,7 @@ export default function LearnPage() {
                                     <div className="lp-banner-sub">{phase.subtitle}</div>
                                 </div>
                                 {phaseDone && (
-                                    <div className="lp-done-chip">✨ Complete</div>
+                                    <div className="lp-done-chip">✨ MASTERED</div>
                                 )}
                             </div>
 

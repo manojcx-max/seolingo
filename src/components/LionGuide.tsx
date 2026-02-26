@@ -32,64 +32,66 @@ export function LionGuide({ message, subMessage, position = "left" }: LionGuideP
                 }
 
                 .lion-character {
-                    width: 130px;
-                    height: 130px;
+                    width: 140px;
+                    height: 140px;
                     flex-shrink: 0;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     position: relative;
                     background: white;
-                    border-radius: 28px;
+                    border-radius: 32px;
                     border: 4px solid var(--border);
-                    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+                    border-bottom-width: 8px;
+                    box-shadow: var(--shadow-md);
                     overflow: hidden;
                     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    animation: sn-float 4s ease-in-out infinite;
                 }
                 .lion-character:hover {
-                    transform: translateY(-5px) scale(1.02);
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-                    border-color: var(--green);
+                    transform: translateY(-5px) scale(1.05);
+                    border-color: var(--primary);
                 }
                 .lion-img {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
-                    /* Scaling up slightly to hide potential edges */
-                    transform: scale(1.1);
+                    transform: scale(1.15);
                 }
 
 
                 .lion-bubble {
                     background: var(--bg-card);
-                    border: 2px solid var(--border);
-                    border-radius: 24px;
-                    padding: 16px 20px;
+                    border: 4px solid var(--border);
+                    border-bottom-width: 8px;
+                    border-radius: 28px;
+                    padding: 20px 24px;
                     position: relative;
                     box-shadow: var(--shadow-sm);
-                    max-width: 300px;
+                    max-width: 320px;
                 }
                 .bubble-text {
-                    font-weight: 850;
-                    font-size: 1rem;
+                    font-weight: 900;
+                    font-size: 1.1rem;
                     line-height: 1.4;
                     color: var(--text);
+                    letter-spacing: -0.2px;
                 }
                 .bubble-sub {
-                    font-size: 0.8rem;
-                    font-weight: 700;
-                    color: var(--text-muted);
-                    margin-top: 4px;
+                    font-size: 0.85rem;
+                    font-weight: 800;
+                    color: var(--text-secondary);
+                    margin-top: 6px;
                 }
 
                 .bubble-tail {
                     position: absolute;
-                    bottom: 12px;
-                    width: 12px;
-                    height: 12px;
+                    bottom: 20px;
+                    width: 16px;
+                    height: 16px;
                     background: var(--bg-card);
-                    border-right: 2px solid var(--border);
-                    border-bottom: 2px solid var(--border);
+                    border-right: 4px solid var(--border);
+                    border-bottom: 4px solid var(--border);
                 }
 
                 .left .bubble-tail {

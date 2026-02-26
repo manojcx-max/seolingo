@@ -3,6 +3,7 @@ import { useGameStore, getLevel } from "@/store/gameStore";
 import { curriculum, getAllLessons } from "@/data/curriculum";
 import { LionGuide } from "@/components/LionGuide";
 import Link from "next/link";
+import { playSound } from "@/utils/audio";
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -45,18 +46,22 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Streak Banner - Sleek version */}
-      <div className="streak-card-premium" onClick={() => setShowStreakModal(true)} style={{ marginBottom: 24 }}>
-        <div className="streak-visual">
-          <span className="streak-icon">🔥</span>
-          <span className="streak-count">{streak}</span>
+      {/* Streak Banner - High Impact */}
+      <div className="streak-banner-premium anim-pop" onClick={() => { setShowStreakModal(true); playSound('step'); }} style={{ marginBottom: 28 }}>
+        <div className="streak-fire-wrap">
+          <span className="streak-fire-icon">🔥</span>
+          <div className="streak-fire-glow"></div>
         </div>
-        <div className="streak-info">
-          <div className="streak-title">Day Streak</div>
-          <div className="streak-status">{streak > 0 ? "You're building momentum!" : "Start your streak today!"}</div>
+        <div className="streak-banner-content">
+          <div className="streak-banner-title">
+            <span className="count">{streak}</span> DAY STREAK
+          </div>
+          <div className="streak-banner-status">
+            {streak > 0 ? "You're on fire! Keep the pride growing." : "Your legend starts with a single step."}
+          </div>
         </div>
-        <div className="streak-action">
-          {useGameStore.getState().streakFreezeActive ? "🛡️ ACTIVE" : "PROTECT"}
+        <div className="streak-banner-badge">
+          {useGameStore.getState().streakFreezeActive ? "🛡️ PROTECTED" : "FREEZE"}
         </div>
       </div>
 
@@ -71,78 +76,77 @@ export default function HomePage() {
       )}
 
       <div className="dashboard-grid">
-        {/* Daily Quests */}
-        <div className="card" style={{ marginBottom: 24 }}>
+        {/* Daily Quests - Gamified Cards */}
+        <div className="card-gamified" style={{ marginBottom: 28, background: 'var(--bg-card)' }}>
           <div className="card-header-clean">
-            <span>Daily Quests</span>
-            <span className="quest-refresh">Next reset at midnight</span>
+            <span style={{ fontSize: '1.2rem', fontWeight: 950 }}>Daily Quests</span>
+            <span className="quest-refresh">Resets at midnight</span>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {quests.map(q => (
-              <div key={q.id} className={`quest-item ${q.claimed ? 'claimed' : ''}`}>
-                <div className="quest-meta">
-                  <div className="quest-name">{q.title}</div>
-                  <div className="quest-reward">{q.reward} Gems</div>
-                </div>
-                <div className="quest-progress-row">
-                  <div className="progress-bar-small">
-                    <div className="progress-fill" style={{ width: `${(q.progress / q.goal) * 100}%` }} />
+              <div key={q.id} className={`quest-card-item ${q.claimed ? 'claimed' : ''}`}>
+                <div className="quest-card-top">
+                  <div className="quest-icon-mini">{q.title.includes('Lesson') ? '📚' : '🔥'}</div>
+                  <div style={{ flex: 1 }}>
+                    <div className="quest-name-v2">{q.title}</div>
+                    <div className="quest-reward-v2">{q.reward} Gems</div>
                   </div>
-                  {q.completed ? (
-                    <button
-                      className={`claim-btn ${q.claimed ? 'claimed' : ''}`}
-                      disabled={q.claimed}
-                      onClick={() => claimQuest(q.id)}
-                    >
-                      {q.claimed ? "Claimed" : "Claim"}
+                  {q.completed && !q.claimed ? (
+                    <button className="btn-green btn-sm anim-pop" onClick={() => { claimQuest(q.id); playSound('success'); }}>
+                      CLAIM
                     </button>
+                  ) : q.claimed ? (
+                    <span className="claimed-check">✓</span>
                   ) : (
-                    <span className="quest-count">{q.progress}/{q.goal}</span>
+                    <span className="quest-count-v2">{q.progress}/{q.goal}</span>
                   )}
+                </div>
+                <div className="progress-track" style={{ height: 10 }}>
+                  <div className={`progress-fill ${q.completed ? 'progress-fill-green' : 'progress-fill-orange'}`} style={{ width: `${(q.progress / q.goal) * 100}%` }} />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Continue Activity */}
+        {/* Continue Activity - Primary Quest */}
         {nextLesson && (
-          <div className="continue-card-premium">
-            <div className="continue-content">
-              <div className="continue-badge">UP NEXT</div>
-              <h3 className="continue-title">{nextLesson.title}</h3>
-              <div className="continue-meta">
-                <span className="xp-reward">+{nextLesson.xp} XP reward</span>
+          <div className="quest-card-main anim-pop">
+            <div className="quest-card-decoration">{nextLesson.title.charAt(0)}</div>
+            <div className="quest-card-body">
+              <div className="quest-badge">MAIN QUEST</div>
+              <h3 className="quest-title">{nextLesson.title}</h3>
+              <div className="quest-meta">
+                <span className="xp-tag">+{nextLesson.xp} XP</span>
+                <span className="time-tag">~5 mins</span>
               </div>
-
             </div>
-            <Link href={`/lesson/${nextLesson.id}`} className="continue-btn-v2">
-              <span className="btn-text">CONTINUE</span>
-              <span className="btn-icon">➜</span>
+            <Link href={`/lesson/${nextLesson.id}`} onClick={() => playSound('roar')} className="btn-green quest-btn">
+              START LESSON ➜
             </Link>
           </div>
         )}
       </div>
 
-      {/* Performance Stats */}
-      <div className="stats-row" style={{ marginTop: 24, marginBottom: 24 }}>
-        <div className="stat-box">
-          <div className="stat-label">Total Progress</div>
-          <div className="stat-value-group">
-            <span className="stat-value">{pct}%</span>
-            <div className="stat-progress-ring">
-              <svg viewBox="0 0 36 36" className="circular-chart">
-                <path className="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="circle" strokeDasharray={`${pct}, 100`} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+      {/* Performance Stats - Premium Cards */}
+      <div className="stats-row" style={{ marginTop: 24, marginBottom: 32 }}>
+        <div className="stat-card-premium">
+          <div className="stat-card-label">Overall Progress</div>
+          <div className="stat-card-body">
+            <span className="stat-large-val">{pct}%</span>
+            <div className="stat-mini-ring">
+              <svg viewBox="0 0 36 36" className="circular-chart-v2">
+                <path className="circle-bg-v2" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="circle-v2" strokeDasharray={`${pct}, 100`} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
               </svg>
             </div>
           </div>
         </div>
-        <div className="stat-box">
-          <div className="stat-label">Daily Goal</div>
-          <div className="stat-value">{lessonsCompletedToday} <span className="stat-divider">/</span> {dailyGoal}</div>
-          <div className="mini-xp-bar">
-            <div className="mini-xp-fill" style={{ width: `${Math.min(100, (lessonsCompletedToday / dailyGoal) * 100)}%` }} />
+        <div className="stat-card-premium">
+          <div className="stat-card-label">Daily Mission</div>
+          <div className="stat-large-val">{lessonsCompletedToday} <span className="stat-divider-v2">/</span> {dailyGoal}</div>
+          <div className="progress-track" style={{ height: 12, marginTop: 12 }}>
+            <div className="progress-fill progress-fill-blue" style={{ width: `${Math.min(100, (lessonsCompletedToday / dailyGoal) * 100)}%` }} />
           </div>
         </div>
       </div>
@@ -254,7 +258,7 @@ export default function HomePage() {
                 }
                 
                 .streak-card-premium {
-                    background: linear-gradient(135deg, #FF9600, #FF7F00);
+                    background: linear-gradient(135deg, var(--orange), var(--orange-dark));
                     border-radius: 28px;
                     padding: 24px 32px;
                     color: white;
@@ -262,10 +266,10 @@ export default function HomePage() {
                     align-items: center;
                     gap: 24px;
                     cursor: pointer;
-                    box-shadow: 0 12px 24px rgba(255, 150, 0, 0.2);
+                    box-shadow: 0 12px 24px rgba(251, 133, 0, 0.25);
                     transition: all 0.3s;
                 }
-                .streak-card-premium:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 15px 30px rgba(255, 150, 0, 0.3); }
+                .streak-card-premium:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 15px 30px rgba(251, 133, 0, 0.35); }
                 .streak-icon { font-size: 2.2rem; }
                 .streak-count { font-size: 2rem; font-weight: 950; }
                 .streak-title { font-weight: 950; font-size: 1.2rem; }

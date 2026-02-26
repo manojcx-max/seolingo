@@ -8,54 +8,7 @@ import dynamic from "next/dynamic";
 const Confetti = dynamic(() => import("react-confetti"), { ssr: false });
 type Phase = "reading" | "quiz" | "complete";
 
-// ── Audio System (Duolingo Style) ──
-const playSuccess = () => {
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const osc1 = ctx.createOscillator();
-    const osc2 = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc1.type = "sine";
-    osc2.type = "sine";
-
-    // Duolingo Success: Two bright tones
-    osc1.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-    osc1.frequency.exponentialRampToValueAtTime(783.99, ctx.currentTime + 0.1); // G5
-
-    osc2.frequency.setValueAtTime(659.25, ctx.currentTime); // E5
-    osc2.frequency.exponentialRampToValueAtTime(1046.50, ctx.currentTime + 0.1); // C6
-
-    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-
-    osc1.connect(gain);
-    osc2.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc1.start();
-    osc2.start();
-    osc1.stop(ctx.currentTime + 0.4);
-    osc2.stop(ctx.currentTime + 0.4);
-};
-
-const playError = () => {
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = "sawtooth";
-    osc.frequency.setValueAtTime(150, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.2);
-
-    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start();
-    osc.stop(ctx.currentTime + 0.3);
-};
+import { playSound } from "@/utils/audio";
 
 // ── Components ──
 
@@ -63,47 +16,12 @@ function LionGuide({ state, speech, onDismiss, isHidden }: { state: 'idle' | 'ha
     if (isHidden) return null;
     return (
         <div className="lion-guide-container anim-fadein" style={{ opacity: isHidden ? 0 : 1, transform: isHidden ? 'translateX(-100px)' : 'none' }}>
-            <div className={`lion-svg-wrap lion-${state}`}>
-                <svg viewBox="0 0 100 100" width="80" height="80">
-                    {/* Mane */}
-                    <circle cx="50" cy="50" r="45" fill="#FF9600" />
-                    <circle cx="50" cy="50" r="40" fill="#FFB74D" />
-                    {/* Face */}
-                    <circle cx="50" cy="55" r="30" fill="#FFE082" />
-                    {/* Ears */}
-                    <circle cx="25" cy="35" r="10" fill="#FFE082" />
-                    <circle cx="75" cy="35" r="10" fill="#FFE082" />
-                    {/* Eyes */}
-                    <g className="lion-eyes">
-                        {state === 'sad' ? (
-                            <>
-                                <path d="M35 50 Q40 45 45 50" stroke="#5D4037" strokeWidth="3" fill="none" />
-                                <path d="M55 50 Q60 45 65 50" stroke="#5D4037" strokeWidth="3" fill="none" />
-                            </>
-                        ) : state === 'happy' ? (
-                            <>
-                                <circle cx="40" cy="50" r="4" fill="#5D4037" />
-                                <circle cx="60" cy="50" r="4" fill="#5D4037" />
-                                <path d="M38 42 L42 45 M58 45 L62 42" stroke="#5D4037" strokeWidth="2" />
-                            </>
-                        ) : (
-                            <>
-                                <circle cx="40" cy="50" r="4" fill="#5D4037" className="eye-l" />
-                                <circle cx="60" cy="50" r="4" fill="#5D4037" className="eye-r" />
-                            </>
-                        )}
-                    </g>
-                    {/* Nose */}
-                    <path d="M46 60 L54 60 L50 65 Z" fill="#5D4037" />
-                    {/* Mouth */}
-                    {state === 'happy' ? (
-                        <path d="M40 70 Q50 80 60 70" stroke="#5D4037" strokeWidth="3" fill="none" />
-                    ) : state === 'sad' ? (
-                        <path d="M40 75 Q50 65 60 75" stroke="#5D4037" strokeWidth="3" fill="none" />
-                    ) : (
-                        <path d="M42 70 Q50 75 58 70" stroke="#5D4037" strokeWidth="2" fill="none" />
-                    )}
-                </svg>
+            <div className={`lion-mascot-wrap lion-${state}`}>
+                <img
+                    src={state === 'happy' ? '/mascot/happy.png' : state === 'sad' ? '/mascot/sad.png' : state === 'thinking' ? '/mascot/thinking.png' : '/mascot/happy.png'}
+                    alt="Lion Guide"
+                    style={{ width: 100, height: 100, objectFit: 'contain' }}
+                />
             </div>
             {speech && (
                 <div className="lion-speech-bubble anim-pop">
@@ -219,9 +137,16 @@ export default function LessonPage() {
 
     if (!lesson) return <div>Lesson not found</div>;
 
-    const activeContent: LessonContent = 'simple' in lesson.content
-        ? (learningStyle === 'technical' ? lesson.content.technical : lesson.content.simple)
-        : lesson.content as LessonContent;
+    const activeContent: LessonContent = useMemo(() => {
+        if (!lesson) return { intro: "", sections: [] };
+        if (Array.isArray(lesson.content)) {
+            return {
+                intro: lesson.content[0] || "",
+                sections: lesson.content.slice(1).map(b => ({ heading: "Key Concept", body: b }))
+            };
+        }
+        return learningStyle === 'technical' ? lesson.content.technical : lesson.content.simple;
+    }, [lesson, learningStyle]);
 
     const currentQ = lesson.quiz[qi];
     const totalQ = lesson.quiz.length;
@@ -233,12 +158,12 @@ export default function LessonPage() {
         const isCorrect = idx === currentQ.correct;
         setCorrect(isCorrect);
         if (isCorrect) {
-            playSuccess();
+            playSound("success");
             setCorrectCount(c => c + 1);
             setGuideState('happy');
             setSpeech(HAPPY_PHRASES[Math.floor(Math.random() * HAPPY_PHRASES.length)]);
         } else {
-            playError();
+            playSound("error");
             if (hearts > 0) loseHeart();
             setGuideState('sad');
             setSpeech(SAD_PHRASES[Math.floor(Math.random() * SAD_PHRASES.length)]);
@@ -249,10 +174,10 @@ export default function LessonPage() {
         if (answered) return;
         if (side === 'left') {
             if (leftSelected === val) setLeftSelected(null);
-            else setLeftSelected(val);
+            else { setLeftSelected(val); playSound('step'); }
         } else {
             if (rightSelected === val) setRightSelected(null);
-            else setRightSelected(val);
+            else { setRightSelected(val); playSound('step'); }
         }
     };
 
@@ -264,7 +189,7 @@ export default function LessonPage() {
                 setMatchedPairs(prev => [...prev, pairStr]);
                 setLeftSelected(null);
                 setRightSelected(null);
-                playSuccess();
+                playSound("success");
                 // Check if all matched
                 if (matchedPairs.length + 1 === currentQ.pairs?.length) {
                     setCorrect(true);
@@ -275,7 +200,7 @@ export default function LessonPage() {
                 }
             } else {
                 setFailedMatch([leftSelected, rightSelected]);
-                playError();
+                playSound("error");
                 setTimeout(() => {
                     setFailedMatch(null);
                     setLeftSelected(null);
@@ -316,7 +241,7 @@ export default function LessonPage() {
                 <button className="btn btn-ghost btn-sm" onClick={() => router.push("/learn")}>✕</button>
                 <div className="lesson-progress-track"><div className="lesson-progress-fill" style={{ width: `${(qi / totalQ) * 100}%` }} /></div>
                 <div style={{ display: "flex", gap: 6, background: 'var(--bg-secondary)', padding: '4px 12px', borderRadius: 20 }}>
-                    {Array.from({ length: 5 }).map((_, i) => <span key={i} style={{ opacity: i >= hearts ? 0.3 : 1 }}>❤️</span>)}
+                    {Array.from({ length: 5 }).map((_, i) => <span key={i} style={{ opacity: i >= hearts ? 0.3 : 1, color: 'var(--heart-color)' }}>❤️</span>)}
                 </div>
             </div>
 
@@ -457,19 +382,42 @@ export default function LessonPage() {
                 .mode-pill { display: inline-block; padding: 4px 12px; background: var(--green-bg); color: var(--green); border-radius: 20px; font-weight: 900; font-size: 0.75rem; margin-bottom: 12px; }
                 .step-num { width: 28px; height: 28px; background: var(--green); color: white; border-radius: 50%; display: flex; alignItems: center; justifyContent: center; font-size: 0.8rem; }
                 
-                .quiz-opt { width: 100%; padding: 16px 20px; border-radius: 16px; border: 2px solid var(--border); background: var(--bg-card); display: flex; gap: 16px; align-items: center; font-weight: 800; text-align: left; cursor: pointer; transition: all 0.2s; margin-bottom: 12px; }
-                .quiz-opt.selected { border-color: var(--blue); background: var(--blue-bg); }
-                .quiz-opt.correct { border-color: var(--green); background: var(--green-bg); }
-                .quiz-opt.wrong { border-color: var(--red); background: var(--red-bg); }
+                .quiz-opt { 
+                    width: 100%; 
+                    padding: 20px 24px; 
+                    border-radius: 20px; 
+                    border: 2px solid var(--border); 
+                    border-bottom-width: 6px;
+                    background: var(--bg-card); 
+                    display: flex; 
+                    gap: 16px; 
+                    align-items: center; 
+                    font-weight: 900; 
+                    text-align: left; 
+                    cursor: pointer; 
+                    transition: all 0.1s; 
+                    margin-bottom: 16px; 
+                    position: relative;
+                }
+                .quiz-opt:active { transform: translateY(2px); border-bottom-width: 4px; }
+                .quiz-opt.selected { border-color: var(--blue); background: var(--blue-bg); border-bottom-color: var(--blue-shadow); color: var(--blue-dark); }
+                .quiz-opt.correct { border-color: var(--green); background: var(--green-bg); border-bottom-color: var(--green-shadow); color: var(--green-dark); }
+                .quiz-opt.wrong { border-color: var(--red); background: var(--red-bg); border-bottom-color: var(--red-shadow); color: var(--red-dark); }
                 
                 .match-btn { padding: 16px; border-radius: 16px; border: 2.5px solid var(--border); background: var(--bg-card); font-weight: 900; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 0 var(--border); }
                 .match-btn.selected { border-color: var(--blue); background: var(--blue-bg); color: var(--blue); transform: translateY(-2px); box-shadow: 0 4px 0 var(--blue); }
                 .match-btn.matched { border-color: var(--green); background: var(--green-bg); color: var(--green); opacity: 0.6; box-shadow: none; transform: none; cursor: default; }
                 .match-btn.failed { border-color: var(--red); background: var(--red-bg); color: var(--red); animation: shake 0.3s; }
                 
-                .feedback-card { margin-top: 32px; padding: 24px; border-radius: 20px; }
-                .fb-correct { background: var(--green-bg); color: var(--green-dark); border: 2px solid var(--green); }
-                .fb-wrong { background: var(--orange-bg); color: var(--orange-dark); border: 2px solid var(--orange); }
+                .feedback-card { 
+                    margin-top: 32px; 
+                    padding: 24px; 
+                    border-radius: 24px; 
+                    border-bottom-width: 8px;
+                    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                }
+                .fb-correct { background: var(--green-bg); color: var(--green-dark); border: 3px solid var(--green); border-bottom-color: var(--green-shadow); }
+                .fb-wrong { background: var(--red-bg); color: var(--red-dark); border: 3px solid var(--red); border-bottom-color: var(--red-shadow); }
                 
                 .stats-row { display: flex; gap: 24px; margin: 40px 0; }
                 .stat-box { background: var(--bg-card); border: 2px solid var(--border); padding: 20px; border-radius: 20px; text-align: center; min-width: 120px; }

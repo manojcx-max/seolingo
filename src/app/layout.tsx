@@ -3,7 +3,7 @@ import "./globals.css";
 import { AppShell } from "@/components/AppShell";
 
 export const viewport: Viewport = {
-  themeColor: "#58cc02",
+  themeColor: "#FFB703",
   width: "device-width",
   initialScale: 1,
   minimumScale: 1,
@@ -11,15 +11,15 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "SEOlingo – Learn Digital Marketing & SEO the Fun Way",
+  title: "RoarRank – Master SEO & Rule the Results",
   description:
-    "Master Digital Marketing and SEO in 10–12 weeks with daily bite-sized lessons, quizzes, streaks, and XP. Free gamified learning — like Duolingo, but for SEO.",
+    "Master Digital Marketing and SEO in 10–12 weeks with daily bite-sized lessons. Join the RoarRank Pride and sharpen your SEO claws today.",
   keywords: ["SEO course", "digital marketing course", "learn SEO", "gamified learning", "SEO India"],
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "SEOlingo",
+    title: "RoarRank",
     startupImage: [
       { url: "/icons/splash-640x1136.png", media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" },
       { url: "/icons/splash-750x1334.png", media: "(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" },
@@ -29,19 +29,19 @@ export const metadata: Metadata = {
   },
   formatDetection: { telephone: false },
   openGraph: {
-    title: "SEOlingo – Gamified SEO & Digital Marketing Learning",
+    title: "RoarRank – Gamified SEO & Digital Marketing Learning",
     description: "Learn SEO & Digital Marketing with daily lessons, streaks, hearts and XP points. Free forever.",
     type: "website",
     images: [{ url: "/icons/og-image.png", width: 1200, height: 630 }],
   },
   icons: {
     icon: [
-      { url: "/icons/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon.png", sizes: "32x32", type: "image/png" },
-      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
     ],
     apple: [
-      { url: "/icons/apple-touch-icon.png", sizes: "180x180" },
+      { url: "/apple-touch-icon.png", sizes: "180x180" },
     ],
   },
 };
@@ -53,9 +53,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="SEOlingo" />
-        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-        <link rel="mask-icon" href="/icons/icon.svg" color="#58cc02" />
+        <meta name="apple-mobile-web-app-title" content="RoarRank" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="mask-icon" href="/favicon.svg" color="#FFB703" />
       </head>
       <body>
         <AppShell>{children}</AppShell>

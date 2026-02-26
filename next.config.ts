@@ -47,6 +47,10 @@ const withPWA = withPWAInit({
 const nextConfig: NextConfig = {
   /* Optimizations */
   reactStrictMode: true,
+  // Ensure we use webpack explicitly for PWA plugin compatibility if needed
+  webpack: (config) => {
+    return config;
+  },
   experimental: {
     // This helps Next.js handle PWA plugin more gracefully in some versions
   }

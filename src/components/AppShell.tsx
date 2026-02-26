@@ -1,8 +1,10 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useGameStore, getLevel } from "@/store/gameStore";
+import { SplashScreen } from "@/components/SplashScreen";
+import { playSound } from "@/utils/audio";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useGameStore, getLevel } from "@/store/gameStore";
 
 type Theme = "light" | "dark";
 interface ThemeCtx { theme: Theme; toggleTheme: () => void }
@@ -21,6 +23,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const [theme, setTheme] = useState<Theme>("light");
     const [activePopup, setActivePopup] = useState<'streak' | 'gems' | 'hearts' | null>(null);
+    const [showSplash, setShowSplash] = useState(false);
     const { xp, hearts, streak, username, avatar, profileImage, xpBoostUntil, gems, syncStatus, syncData } = useGameStore();
     const { level } = getLevel(xp);
 
@@ -28,14 +31,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     const isClean = pathname.startsWith("/onboarding") || pathname.startsWith("/lesson");
 
     useEffect(() => {
-        const saved = localStorage.getItem("seolingo-theme") as Theme | null;
+        const saved = localStorage.getItem("roarrank-theme") as Theme | null;
         if (saved) setTheme(saved);
+
+        // Check splash
+        const shown = sessionStorage.getItem("roarrank-splash-shown");
+        if (!shown) {
+            setShowSplash(true);
+            sessionStorage.setItem("roarrank-splash-shown", "true");
+        }
     }, []);
 
     const toggleTheme = () => {
         const next = theme === "light" ? "dark" : "light";
         setTheme(next);
-        localStorage.setItem("seolingo-theme", next);
+        localStorage.setItem("roarrank-theme", next);
     };
 
     useEffect(() => {
@@ -68,6 +78,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         return (
             <ThemeContext.Provider value={{ theme, toggleTheme }}>
                 {children}
+                {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
             </ThemeContext.Provider>
         );
     }
@@ -76,19 +87,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
             {/* Mobile Header */}
             <header className="mobile-header">
-                <Link href="/" style={{ textDecoration: "none", color: 'inherit' }}>
-                    <span className="mobile-logo">SEOlingo</span>
+                <Link href="/" style={{ textDecoration: "none", color: 'inherit', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <img src="/lion-mascot.png" alt="Lion" style={{ width: 32, height: 32, borderRadius: 8 }} />
+                    <span className="mobile-logo">RoarRank</span>
                 </Link>
                 <div className="mobile-stats">
-                    <button className="stat-pill-btn streak" onClick={() => setActivePopup('streak')}>
+                    <button className="stat-pill streak" style={{ color: 'var(--orange)', background: 'var(--orange-bg)', borderColor: 'var(--orange-dark)', borderWidth: '0 0 4px 0' }} onClick={() => setActivePopup('streak')}>
                         <span className="stat-emoji">🔥</span>
                         <span>{streak}</span>
                     </button>
-                    <button className="stat-pill-btn gems" onClick={() => setActivePopup('gems')}>
+                    <button className="stat-pill gems" style={{ color: 'var(--primary-dark)', background: 'var(--primary-bg)', borderColor: 'var(--primary-shadow)', borderWidth: '0 0 4px 0' }} onClick={() => setActivePopup('gems')}>
                         <span className="stat-emoji">💎</span>
                         <span>{gems}</span>
                     </button>
-                    <button className="stat-pill-btn hearts" onClick={() => setActivePopup('hearts')}>
+                    <button className="stat-pill hearts" style={{ color: 'var(--red)', background: 'var(--red-bg)', borderColor: 'var(--red-dark)', borderWidth: '0 0 4px 0' }} onClick={() => setActivePopup('hearts')}>
                         <span className="stat-emoji">❤️</span>
                         <span>{hearts}</span>
                     </button>
@@ -103,13 +115,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 {/* Desktop Sidebar */}
                 <nav className="sidebar">
                     <Link href="/" className="sidebar-logo">
-                        <span className="logo-text">SEOlingo</span>
+                        <img src="/lion-mascot.png" alt="Lion" style={{ width: 42, height: 42, borderRadius: 12, boxShadow: 'var(--shadow-sm)' }} />
+                        <span className="logo-text">RoarRank</span>
                     </Link>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%', padding: '0 8px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%', padding: '0 8px' }}>
                         {NAV.map(n => (
                             <Link key={n.href} href={n.href} className={`sidebar-nav-item${pathname === n.href ? " active" : ""}`}>
-                                <span className="sidebar-nav-icon">{n.icon}</span>
-                                <span style={{ fontWeight: 800 }}>{n.label}</span>
+                                <span className="sidebar-nav-icon" style={{
+                                    background: pathname === n.href ? 'var(--primary)' : 'transparent',
+                                    color: pathname === n.href ? 'white' : 'inherit',
+                                    borderRadius: 12,
+                                    width: 40,
+                                    height: 40,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    transition: 'all 0.2s',
+                                    boxShadow: pathname === n.href ? '0 4px 0 var(--primary-shadow)' : 'none'
+                                }}>{n.icon}</span>
+                                <span style={{ fontWeight: 900, textTransform: 'uppercase', fontSize: '0.85rem', letterSpacing: '0.5px' }}>{n.label}</span>
                             </Link>
                         ))}
                     </div>
@@ -156,13 +180,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <nav className="mobile-bottom-nav">
                 <div className="mobile-bottom-nav-inner">
                     {NAV.map(n => (
-                        <Link key={n.href} href={n.href} className={`mobile-nav-item${pathname === n.href ? " active" : ""}`}>
+                        <Link key={n.href} href={n.href} onClick={() => playSound('step')} className={`mobile-nav-item${pathname === n.href ? " active" : ""}`}>
                             <span className="nav-icon">{n.icon}</span>
                             <span style={{ fontSize: '0.62rem', fontWeight: 900, textTransform: 'uppercase', marginTop: 4 }}>{n.label}</span>
                         </Link>
                     ))}
                 </div>
             </nav>
+
+            {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
         </ThemeContext.Provider>
     );
 }

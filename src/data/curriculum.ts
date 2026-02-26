@@ -1,15 +1,26 @@
+export interface Question {
+    question: string;
+    options: string[];
+    answer?: number; // back-compat
+    correct?: number;
+    type?: 'multiple' | 'match';
+    pairs?: { left: string; right: string }[];
+    explanation?: string;
+}
+
+export interface LessonContent {
+    intro: string;
+    sections: { heading: string; body: string }[];
+}
+
 export interface Lesson {
     id: string;
     title: string;
     emoji: string;
     minutes: number;
     xp: number;
-    content: string[];
-    quiz: {
-        question: string;
-        options: string[];
-        answer: number;
-    }[];
+    content: string[] | { simple: LessonContent; technical: LessonContent };
+    quiz: Question[];
 }
 
 export interface Unit {
@@ -363,5 +374,9 @@ export const curriculum: Phase[] = [
 
 export function getAllLessons(): Lesson[] {
     return curriculum.flatMap(phase => phase.units.flatMap(unit => unit.lessons));
+}
+
+export function getLessonById(id: string): Lesson | undefined {
+    return getAllLessons().find(l => l.id === id);
 }
 

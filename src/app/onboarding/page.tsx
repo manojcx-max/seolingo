@@ -10,8 +10,8 @@ const GOALS = [
 ] as const;
 
 const STYLES = [
-    { id: "simple", icon: "🍦", title: "Keep it Simple", sub: "Explain like I'm five. Clear, fun, and jargon-free." },
-    { id: "technical", icon: "🛠️", title: "Deep Dive", sub: "Give me the technical details, industry terms, and advanced specs." },
+    { id: "simple", icon: "🦁", title: "Safari Mode", sub: "Clear, fun, and jargon-free. Perfect for cub-level beginners." },
+    { id: "technical", icon: "👑", title: "Roar Mode", sub: "Deep technical details, industry specs, and alpha-level marketing." },
 ] as const;
 
 const MOTIVATION_QUOTES = [
@@ -63,7 +63,7 @@ export default function OnboardingPage() {
             <div className="ob-card anim-fadein">
                 {/* Logo */}
                 <div style={{ textAlign: "center", marginBottom: 32 }}>
-                    <div style={{ fontSize: "1.8rem", fontWeight: 900, background: "linear-gradient(135deg, #58CC02, #00D4FF)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", letterSpacing: '-0.5px' }}>SEOlingo</div>
+                    <div style={{ fontSize: "1.8rem", fontWeight: 900, background: "var(--lion-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", letterSpacing: '-0.5px' }}>RoarRank</div>
                     <div style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginTop: 4, fontWeight: 600 }}>Master Digital Marketing & SEO</div>
                 </div>
 
@@ -77,15 +77,15 @@ export default function OnboardingPage() {
                     <div className="anim-fadein">
                         <h2 style={{ marginBottom: 6, fontSize: '1.5rem', fontWeight: 900 }}>What is your grand mission? 🚀</h2>
                         <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 24, fontWeight: 500 }}>Pick your path to digital immortality.</p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                             {GOALS.map(g => (
-                                <div key={g.id} className={`goal-card${goal === g.id ? " selected" : ""}`} onClick={() => setGoalLocal(g.id)} style={{ padding: '16px 20px' }}>
-                                    <div className="goal-card-icon" style={{ color: goal === g.id ? 'var(--green)' : 'var(--text-muted)' }}>{g.icon}</div>
+                                <div key={g.id} className={`goal-card card-gamified${goal === g.id ? " selected" : ""}`} onClick={() => setGoalLocal(g.id)} style={{ borderBottomWidth: goal === g.id ? 8 : 4 }}>
+                                    <div className="goal-card-icon" style={{ color: goal === g.id ? 'var(--primary)' : 'var(--text-muted)' }}>{g.icon}</div>
                                     <div style={{ flex: 1 }}>
-                                        <div className="goal-card-title" style={{ fontSize: '1rem', fontWeight: 800 }}>{g.title}</div>
-                                        <div className="goal-card-sub" style={{ fontSize: '0.8rem', opacity: 0.8 }}>{g.sub}</div>
+                                        <div className="goal-card-title" style={{ fontSize: '1.05rem', fontWeight: 950 }}>{g.title}</div>
+                                        <div className="goal-card-sub" style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.8 }}>{g.sub}</div>
                                     </div>
-                                    {goal === g.id && <span style={{ color: 'var(--green)', fontSize: '1.2rem' }}>✓</span>}
+                                    {goal === g.id && <span style={{ color: 'var(--primary)', fontSize: '1.5rem', fontWeight: 950 }}>🐾</span>}
                                 </div>
                             ))}
                         </div>
@@ -100,15 +100,15 @@ export default function OnboardingPage() {
                     <div className="anim-fadein">
                         <h2 style={{ marginBottom: 6, fontSize: '1.5rem', fontWeight: 900 }}>Choose your training style 🧪</h2>
                         <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 24, fontWeight: 500 }}>How do you want us to deliver the knowledge?</p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                             {STYLES.map(s => (
-                                <div key={s.id} className={`goal-card${style === s.id ? " selected" : ""}`} onClick={() => setStyleLocal(s.id)} style={{ padding: '16px 20px' }}>
-                                    <div style={{ fontSize: '2rem', width: 44 }}>{s.icon}</div>
+                                <div key={s.id} className={`goal-card card-gamified${style === s.id ? " selected" : ""}`} onClick={() => setStyleLocal(s.id)} style={{ borderBottomWidth: style === s.id ? 8 : 4 }}>
+                                    <div style={{ fontSize: '2.5rem', width: 50 }}>{s.icon}</div>
                                     <div style={{ flex: 1 }}>
-                                        <div className="goal-card-title" style={{ fontSize: '1rem', fontWeight: 800 }}>{s.title}</div>
-                                        <div className="goal-card-sub" style={{ fontSize: '0.8rem', opacity: 0.8 }}>{s.sub}</div>
+                                        <div className="goal-card-title" style={{ fontSize: '1.05rem', fontWeight: 950 }}>{s.title}</div>
+                                        <div className="goal-card-sub" style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.8 }}>{s.sub}</div>
                                     </div>
-                                    {style === s.id && <span style={{ color: 'var(--green)', fontSize: '1.2rem' }}>✓</span>}
+                                    {style === s.id && <span style={{ color: 'var(--primary)', fontSize: '1.5rem', fontWeight: 950 }}>🐾</span>}
                                 </div>
                             ))}
                         </div>

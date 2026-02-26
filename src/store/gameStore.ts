@@ -332,7 +332,7 @@ export const useGameStore = create<GameState>()(
                 console.log("☁️ Cloud Sync Complete");
             }
         }),
-        { name: "seolingo-v3" }
+        { name: "roarrank-v3" }
     )
 );
 

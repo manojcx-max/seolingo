@@ -77,8 +77,8 @@ export default function OnboardingPage() {
                 {step === 1 && (
                     <div className="anim-fadein">
                         <h2 style={{ marginBottom: 6, fontSize: '1.5rem', fontWeight: 900 }}>What is your grand mission? 🚀</h2>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 24, fontWeight: 500 }}>Pick your path to digital immortality.</p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                        <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", marginBottom: 20, fontWeight: 500 }}>Pick your path to digital immortality.</p>
+                        <div className="goal-list-wrap" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                             {GOALS.map(g => (
                                 <div key={g.id} className={`goal-card card-gamified${goal === g.id ? " selected" : ""}`} onClick={() => setGoalLocal(g.id)} style={{ borderBottomWidth: goal === g.id ? 8 : 4 }}>
                                     <div className="goal-card-icon" style={{ color: goal === g.id ? 'var(--primary)' : 'var(--text-muted)' }}>{g.icon}</div>
@@ -90,7 +90,7 @@ export default function OnboardingPage() {
                                 </div>
                             ))}
                         </div>
-                        <button className="btn-premium" style={{ width: '100%', marginTop: 28 }} disabled={!goal} onClick={() => setStep(2)}>
+                        <button className="btn-premium" style={{ width: '100%', marginTop: 20 }} disabled={!goal} onClick={() => setStep(2)}>
                             I'M READY FOR SUCCESS!
                         </button>
                     </div>
@@ -100,8 +100,8 @@ export default function OnboardingPage() {
                 {step === 2 && (
                     <div className="anim-fadein">
                         <h2 style={{ marginBottom: 6, fontSize: '1.5rem', fontWeight: 900 }}>Choose your training style 🧪</h2>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 24, fontWeight: 500 }}>How do you want us to deliver the knowledge?</p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                        <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", marginBottom: 20, fontWeight: 500 }}>How do you want us to deliver the knowledge?</p>
+                        <div className="goal-list-wrap" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                             {STYLES.map(s => (
                                 <div key={s.id} className={`goal-card card-gamified${style === s.id ? " selected" : ""}`} onClick={() => setStyleLocal(s.id)} style={{ borderBottomWidth: style === s.id ? 8 : 4 }}>
                                     <div style={{ color: style === s.id ? 'var(--primary)' : 'var(--text-muted)' }}>{s.icon}</div>
@@ -128,8 +128,8 @@ export default function OnboardingPage() {
                         <h2 style={{ marginBottom: 6, fontSize: '1.5rem', fontWeight: 900 }}>Who shall we address as "Le Legend"? 👑</h2>
                         <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 24, fontWeight: 500 }}>Give us your coolest username and your wisdom level (age).</p>
 
-                        <div style={{ marginBottom: 24 }}>
-                            <label style={{ display: "block", fontWeight: 800, fontSize: "0.8rem", marginBottom: 10, textTransform: 'uppercase', color: 'var(--text-muted)' }}>The Legend's Name</label>
+                        <div style={{ marginBottom: 16 }}>
+                            <label style={{ display: "block", fontWeight: 800, fontSize: "0.8rem", marginBottom: 8, textTransform: 'uppercase', color: 'var(--text-muted)' }}>The Legend's Name</label>
                             <input
                                 className="ob-input"
                                 placeholder="e.g. SEO_Slayer_9000"
@@ -137,19 +137,19 @@ export default function OnboardingPage() {
                                 onChange={e => setName(e.target.value)}
                                 maxLength={20}
                                 autoFocus
-                                style={{ width: '100%', padding: '16px' }}
+                                style={{ width: '100%', padding: '14px' }}
                             />
                         </div>
 
-                        <div style={{ marginBottom: 28 }}>
-                            <label style={{ display: "block", fontWeight: 800, fontSize: "0.8rem", marginBottom: 10, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Years of Human Experience (Age)</label>
+                        <div style={{ marginBottom: 20 }}>
+                            <label style={{ display: "block", fontWeight: 800, fontSize: "0.8rem", marginBottom: 8, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Wisdom Level (Age)</label>
                             <input
                                 className="ob-input"
                                 type="number"
                                 placeholder="25"
                                 value={age}
                                 onChange={e => setAgeLocal(e.target.value)}
-                                style={{ width: '100%', padding: '16px' }}
+                                style={{ width: '100%', padding: '14px' }}
                             />
                         </div>
 
@@ -168,13 +168,13 @@ export default function OnboardingPage() {
                         <h2 style={{ marginBottom: 6, fontSize: '1.5rem', fontWeight: 900 }}>Let's see that beautiful face! 📸</h2>
                         <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginBottom: 32, fontWeight: 500 }}>Upload a picture or keep the mighty lion.</p>
 
-                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 20, marginBottom: 32 }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16, marginBottom: 20 }}>
                             <div
-                                style={{ width: 120, height: 120, background: 'var(--bg-secondary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4rem', overflow: 'hidden', border: '4px solid var(--green)', position: 'relative', cursor: 'pointer' }}
+                                style={{ width: 100, height: 100, background: 'var(--bg-secondary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', overflow: 'hidden', border: '4px solid var(--green)', position: 'relative', cursor: 'pointer' }}
                                 onClick={() => fileInputRef.current?.click()}
                             >
                                 {profileImg ? <img src={profileImg} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : avatar}
-                                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(0,0,0,0.4)', color: 'white', fontSize: '0.7rem', fontWeight: 800, padding: '4px 0' }}>CHANGE</div>
+                                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(0,0,0,0.4)', color: 'white', fontSize: '0.65rem', fontWeight: 800, padding: '4px 0' }}>CHANGE</div>
                             </div>
                         </div>
 
@@ -198,20 +198,20 @@ export default function OnboardingPage() {
                 {/* ── Step 5: Final Motivation ── */}
                 {step === 5 && (
                     <div className="anim-fadein" style={{ textAlign: "center" }}>
-                        <div style={{ fontSize: "5rem", marginBottom: 20, animation: 'pop 0.5s ease' }}>{profileImg ? <div style={{ width: 100, height: 100, borderRadius: '50%', overflow: 'hidden', border: '4px solid var(--green)', margin: '0 auto' }}><img src={profileImg} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div> : avatar}</div>
-                        <h2 style={{ fontSize: '1.75rem', fontWeight: 900 }}>"{randomQuote}"</h2>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", margin: "12px 0 32px", fontWeight: 500 }}>
-                            You're all set, {name}! Your human age of {age} is perfect for conquering the web with your {style} style.
+                        <div style={{ fontSize: "4rem", marginBottom: 16, animation: 'pop 0.5s ease' }}>{profileImg ? <div style={{ width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', border: '4px solid var(--green)', margin: '0 auto' }}><img src={profileImg} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div> : avatar}</div>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>"{randomQuote}"</h2>
+                        <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", margin: "8px 0 20px", fontWeight: 500 }}>
+                            You're all set, {name}! Your human age of {age} is perfect for mastering marketing with your {style} style.
                         </p>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 32 }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
                             {[
-                                { icon: <Flame size={20} />, text: "Commit to your daily streak", color: 'var(--orange)' },
-                                { icon: <Zap size={20} />, text: "Stack up that global XP", color: 'var(--purple)' },
-                                { icon: <Trophy size={20} />, text: "Rise to number one", color: 'var(--blue)' },
+                                { icon: <Flame size={18} />, text: "Commit to your daily streak", color: 'var(--orange)' },
+                                { icon: <Zap size={18} />, text: "Stack up that global XP", color: 'var(--purple)' },
+                                { icon: <Trophy size={18} />, text: "Rise to number one", color: 'var(--blue)' },
                             ].map(f => (
-                                <div key={f.text} style={{ display: "flex", alignItems: "center", gap: 16, padding: "14px 20px", background: "var(--bg-secondary)", borderRadius: "16px", textAlign: "left" }}>
+                                <div key={f.text} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", background: "var(--bg-secondary)", borderRadius: "14px", textAlign: "left" }}>
                                     <span style={{ color: f.color }}>{f.icon}</span>
-                                    <span style={{ fontWeight: 800, fontSize: "0.95rem" }}>{f.text}</span>
+                                    <span style={{ fontWeight: 800, fontSize: "0.85rem" }}>{f.text}</span>
                                 </div>
                             ))}
                         </div>

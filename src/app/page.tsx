@@ -4,6 +4,8 @@ import { curriculum, getAllLessons } from "@/data/curriculum";
 import { LionGuide } from "@/components/LionGuide";
 import Link from "next/link";
 import { playSound } from "@/utils/audio";
+import { Flame, Star, Trophy, BookOpen, ChevronRight, Zap, Check } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -49,7 +51,7 @@ export default function HomePage() {
       {/* Streak Banner - High Impact */}
       <div className="streak-banner-premium anim-pop" onClick={() => { setShowStreakModal(true); playSound('step'); }} style={{ marginBottom: 28 }}>
         <div className="streak-fire-wrap">
-          <span className="streak-fire-icon">🔥</span>
+          <Flame className="streak-fire-icon" size={32} fill="white" />
           <div className="streak-fire-glow"></div>
         </div>
         <div className="streak-banner-content">
@@ -57,52 +59,54 @@ export default function HomePage() {
             <span className="count">{streak}</span> DAY STREAK
           </div>
           <div className="streak-banner-status">
-            {streak > 0 ? "You're on fire! Keep the pride growing." : "Your legend starts with a single step."}
+            {streak > 0 ? "You're on fire! Keep it up." : "Start your legend today."}
           </div>
         </div>
-        <div className="streak-banner-badge">
-          {useGameStore.getState().streakFreezeActive ? "🛡️ PROTECTED" : "FREEZE"}
-        </div>
+        {!useGameStore.getState().streakFreezeActive && (
+          <div className="streak-banner-badge mobile-hide">
+            FREEZE
+          </div>
+        )}
       </div>
-
-      <LionGuide
-        message={`Hey ${username}! Ready to sharpen your SEO claws?`}
-        subMessage="The first lesson on Rendering is waiting for you!"
-      />
-
-      {showStreakModal && (
-
-        <StreakModal streak={streak} gems={gems} onClose={() => setShowStreakModal(false)} />
-      )}
 
       <div className="dashboard-grid">
         {/* Daily Quests - Gamified Cards */}
         <div className="card-gamified" style={{ marginBottom: 28, background: 'var(--bg-card)' }}>
           <div className="card-header-clean">
-            <span style={{ fontSize: '1.2rem', fontWeight: 950 }}>Daily Quests</span>
+            <span className="live-indicator">
+              <span className="pulse-dot"></span>
+              Daily Quests
+            </span>
             <span className="quest-refresh">Resets at midnight</span>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {quests.map(q => (
               <div key={q.id} className={`quest-card-item ${q.claimed ? 'claimed' : ''}`}>
                 <div className="quest-card-top">
-                  <div className="quest-icon-mini">{q.title.includes('Lesson') ? '📚' : '🔥'}</div>
-                  <div style={{ flex: 1 }}>
-                    <div className="quest-name-v2">{q.title}</div>
-                    <div className="quest-reward-v2">{q.reward} Gems</div>
+                  <div className="quest-icon-mini" style={{ color: q.title.includes('Lesson') ? 'var(--blue)' : 'var(--orange)' }}>
+                    {q.title.includes('Lesson') ? <BookOpen size={18} /> : <Flame size={18} />}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="quest-name-v2 text-truncate">{q.title}</div>
+                    <div className="quest-reward-v2">{q.reward} Gems • {q.xpReward} XP</div>
                   </div>
                   {q.completed && !q.claimed ? (
-                    <button className="btn-green btn-sm anim-pop" onClick={() => { claimQuest(q.id); playSound('success'); }}>
+                    <button className="btn-green btn-sm anim-pop" style={{ padding: '6px 12px' }} onClick={(e) => { e.stopPropagation(); claimQuest(q.id); playSound('success'); }}>
                       CLAIM
                     </button>
                   ) : q.claimed ? (
-                    <span className="claimed-check">✓</span>
+                    <div className="claimed-badge"><Check size={14} /></div>
                   ) : (
                     <span className="quest-count-v2">{q.progress}/{q.goal}</span>
                   )}
                 </div>
-                <div className="progress-track" style={{ height: 10 }}>
-                  <div className={`progress-fill ${q.completed ? 'progress-fill-green' : 'progress-fill-orange'}`} style={{ width: `${(q.progress / q.goal) * 100}%` }} />
+                <div className="progress-track-v2">
+                  <motion.div
+                    className={`progress-fill-v2 ${q.completed ? 'bg-green' : 'bg-orange'}`}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(q.progress / q.goal) * 100}%` }}
+                    transition={{ type: "spring", stiffness: 60 }}
+                  />
                 </div>
               </div>
             ))}
@@ -112,26 +116,35 @@ export default function HomePage() {
         {/* Continue Activity - Primary Quest */}
         {nextLesson && (
           <div className="quest-card-main anim-pop">
-            <div className="quest-card-decoration">{nextLesson.title.charAt(0)}</div>
+            <div className="quest-card-decoration mobile-hide">{nextLesson.title.charAt(0)}</div>
             <div className="quest-card-body">
-              <div className="quest-badge">MAIN QUEST</div>
+              <div className="quest-badge">NEXT CHALLENGE</div>
               <h3 className="quest-title">{nextLesson.title}</h3>
               <div className="quest-meta">
-                <span className="xp-tag">+{nextLesson.xp} XP</span>
-                <span className="time-tag">~5 mins</span>
+                <span className="xp-tag"><Star size={12} fill="currentColor" /> {nextLesson.xp} XP</span>
+                <span className="time-tag">~{nextLesson.minutes}m</span>
               </div>
             </div>
             <Link href={`/lesson/${nextLesson.id}`} onClick={() => playSound('roar')} className="btn-green quest-btn">
-              START LESSON ➜
+              START ➜
             </Link>
           </div>
         )}
       </div>
 
+      <LionGuide
+        message={`Hey ${username}! Ready for more?`}
+        subMessage="Mastering data-driven SEO is the key to dominance."
+      />
+
+      {showStreakModal && (
+        <StreakModal streak={streak} gems={gems} onClose={() => setShowStreakModal(false)} />
+      )}
+
       {/* Performance Stats - Premium Cards */}
-      <div className="stats-row" style={{ marginTop: 24, marginBottom: 32 }}>
+      <div className="stats-row" style={{ marginTop: 24, marginBottom: 32, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
         <div className="stat-card-premium">
-          <div className="stat-card-label">Overall Progress</div>
+          <div className="stat-card-label">Curriculum Mastered</div>
           <div className="stat-card-body">
             <span className="stat-large-val">{pct}%</span>
             <div className="stat-mini-ring">
@@ -145,11 +158,42 @@ export default function HomePage() {
         <div className="stat-card-premium">
           <div className="stat-card-label">Daily Mission</div>
           <div className="stat-large-val">{lessonsCompletedToday} <span className="stat-divider-v2">/</span> {dailyGoal}</div>
-          <div className="progress-track" style={{ height: 12, marginTop: 12 }}>
-            <div className="progress-fill progress-fill-blue" style={{ width: `${Math.min(100, (lessonsCompletedToday / dailyGoal) * 100)}%` }} />
+          <div className="progress-track-v2" style={{ marginTop: 12 }}>
+            <motion.div
+              className="progress-fill-v2 bg-blue"
+              initial={{ width: 0 }}
+              animate={{ width: `${Math.min(100, (lessonsCompletedToday / dailyGoal) * 100)}%` }}
+            />
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+                .live-indicator { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 950; }
+                .pulse-dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite; }
+                @keyframes pulse { 0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(255, 75, 75, 0.4); } 70% { transform: scale(1.1); opacity: 0.8; box-shadow: 0 0 0 6px rgba(255, 75, 75, 0); } 100% { transform: scale(1); opacity: 1; } }
+                
+                .quest-card-item { background: var(--bg-secondary); padding: 16px; border-radius: 20px; border: 2px solid var(--border); transition: all 0.2s; }
+                .quest-card-item:hover { transform: translateY(-2px); border-color: var(--primary-light); }
+                .progress-track-v2 { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 12px; }
+                .progress-fill-v2 { height: 100%; border-radius: 4px; }
+                .bg-green { background: var(--green); }
+                .bg-orange { background: var(--orange); }
+                .bg-blue { background: var(--blue); }
+                
+                .claimed-badge { width: 24px; height: 24px; background: var(--green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+                .text-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+                @media (max-width: 480px) {
+                    .mobile-hide { display: none; }
+                    .streak-banner-premium { padding: 16px; gap: 12px; }
+                    .streak-fire-wrap { width: 56px; height: 56px; }
+                    .streak-fire-icon { width: 24px; height: 24px; }
+                    .streak-banner-title { font-size: 0.9rem; }
+                    .streak-banner-status { font-size: 0.75rem; }
+                    .stat-large-val { font-size: 1.5rem; }
+                }
+            `}</style>
 
       <style jsx>{`
                 .dashboard-grid {

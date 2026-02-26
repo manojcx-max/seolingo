@@ -5,6 +5,7 @@ import { SplashScreen } from "@/components/SplashScreen";
 import { playSound } from "@/utils/audio";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { Flame, Gem, Heart, Cloud, Clock, WifiOff, Moon, Sun } from "lucide-react";
 
 type Theme = "light" | "dark";
 interface ThemeCtx { theme: Theme; toggleTheme: () => void }
@@ -87,21 +88,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
             {/* Mobile Header */}
             <header className="mobile-header">
-                <Link href="/" style={{ textDecoration: "none", color: 'inherit', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Link href="/" style={{ textDecoration: "none", color: 'inherit', display: 'flex', alignItems: 'center', gap: 6 }}>
                     <img src="/lion-mascot.png" alt="Lion" style={{ width: 32, height: 32, borderRadius: 8 }} />
                     <span className="mobile-logo">RoarRank</span>
                 </Link>
                 <div className="mobile-stats">
                     <button className="stat-pill streak" style={{ color: 'var(--orange)', background: 'var(--orange-bg)', borderColor: 'var(--orange-dark)', borderWidth: '0 0 4px 0' }} onClick={() => setActivePopup('streak')}>
-                        <span className="stat-emoji">🔥</span>
+                        <Flame size={16} fill="currentColor" />
                         <span>{streak}</span>
                     </button>
                     <button className="stat-pill gems" style={{ color: 'var(--primary-dark)', background: 'var(--primary-bg)', borderColor: 'var(--primary-shadow)', borderWidth: '0 0 4px 0' }} onClick={() => setActivePopup('gems')}>
-                        <span className="stat-emoji">💎</span>
+                        <Gem size={16} fill="currentColor" />
                         <span>{gems}</span>
                     </button>
                     <button className="stat-pill hearts" style={{ color: 'var(--red)', background: 'var(--red-bg)', borderColor: 'var(--red-dark)', borderWidth: '0 0 4px 0' }} onClick={() => setActivePopup('hearts')}>
-                        <span className="stat-emoji">❤️</span>
+                        <Heart size={16} fill="currentColor" />
                         <span>{hearts}</span>
                     </button>
                     <SyncIndicator status={syncStatus} onSync={syncData} />
@@ -215,21 +216,21 @@ function StatPopup({ type, onClose }: { type: 'streak' | 'gems' | 'hearts', onCl
 
     const content = {
         streak: {
-            icon: "🔥",
+            icon: <Flame size={64} fill="currentColor" />,
             color: "var(--orange)",
             title: `${streak} Day Streak`,
             desc: "Keep learning every day to grow your streak. Miss a day, and it resets to zero!",
             footer: "PROTECT YOUR STREAK IN THE SHOP"
         },
         gems: {
-            icon: "💎",
+            icon: <Gem size={64} fill="currentColor" />,
             color: "var(--purple)",
             title: `${gems} Gems`,
             desc: "Gems are used to buy power-ups, avatars, and streak freezes in the shop.",
             footer: "EARN MORE BY COMPLETING LESSONS"
         },
         hearts: {
-            icon: "❤️",
+            icon: <Heart size={64} fill="currentColor" />,
             color: "var(--red)",
             title: `${hearts}/5 Hearts`,
             desc: hearts === 5 ? "Your hearts are full! Go start a lesson." : `Wait for your hearts to refill or get unlimited in the shop. Next heart in: ${timeLeft}`,
@@ -339,9 +340,9 @@ function IconProfile() {
 
 function SyncIndicator({ status, onSync }: { status: 'synced' | 'pending' | 'offline', onSync: () => void }) {
     const config = {
-        synced: { icon: "☁️", color: "var(--green)", label: "Synced" },
-        pending: { icon: "⏳", color: "var(--orange)", label: "Syncing..." },
-        offline: { icon: "📡", color: "var(--text-muted)", label: "Offline" }
+        synced: { icon: <Cloud size={18} fill="currentColor" />, color: "var(--green)", label: "Synced" },
+        pending: { icon: <Clock size={18} />, color: "var(--orange)", label: "Syncing..." },
+        offline: { icon: <WifiOff size={18} />, color: "var(--text-muted)", label: "Offline" }
     }[status];
 
     return (
